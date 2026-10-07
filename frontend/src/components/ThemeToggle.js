@@ -8,7 +8,7 @@ export default function ThemeToggle({ className = "" }) {
 
   if (!mounted) {
     return (
-      <div className={`w-9 h-9 rounded-xl border border-slate-200 bg-white ${className}`} />
+      <div className={`w-9 h-9 rounded-xl border border-slate-200 bg-[var(--card)] ${className}`} />
     );
   }
 
@@ -19,7 +19,7 @@ export default function ThemeToggle({ className = "" }) {
       onClick={toggleTheme}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
       title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-      className={`p-2 rounded-xl transition-all border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-600 shadow-2xs active:scale-95 ${className}`}
+      className={`p-2 rounded-xl transition-all border border-slate-200 hover:border-slate-300 bg-[var(--card)] hover:bg-slate-50 text-slate-600 shadow-2xs active:scale-95 ${className}`}
     >
       {theme === "dark" ? (
         <Sun className="w-4 h-4 text-amber-500 animate-in fade-in" />

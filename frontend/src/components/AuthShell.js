@@ -1,0 +1,9 @@
+import Link from "next/link";
+import { CheckCircle2, ArrowLeft, Check, Kanban } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
+export default function AuthShell({children}){
+ return <main className="grid min-h-[100dvh] bg-[var(--background)] lg:grid-cols-2">
+ <aside className="hidden flex-col justify-between border-r border-slate-200 bg-slate-100 p-12 lg:flex xl:p-16"><Link href="/" className="flex items-center gap-2.5 text-xl font-semibold tracking-tight"><span className="flex size-9 items-center justify-center rounded-xl bg-teal-700 text-white"><CheckCircle2 size={20}/></span>TaskFlow</Link><div className="max-w-md py-12"><span className="mb-7 flex size-14 items-center justify-center rounded-2xl border border-slate-200 bg-[var(--card)] text-teal-700"><Kanban size={26}/></span><h2 className="text-5xl font-medium leading-[1.12] tracking-tight">A little structure.<br/><span className="text-teal-700">A lot more focus.</span></h2><p className="mt-6 max-w-sm text-base leading-relaxed text-slate-500">A calm home for your tasks, from the first idea to the final checkmark.</p><div className="mt-10 space-y-4">{["Keep your next step in sight","Make progress at your own pace","See the work you have finished"].map(text=><p key={text} className="flex items-center gap-3 text-sm text-slate-600"><Check size={16} className="text-teal-700"/>{text}</p>)}</div></div><p className="text-xs text-slate-500">© 2026 TaskFlow. Professional task and workflow software.</p></aside>
+ <section className="flex min-w-0 flex-col px-5 py-6 sm:px-10"><div className="flex items-center justify-between"><Link href="/" className="flex items-center gap-2 py-2 text-xs text-slate-500 hover:text-teal-700"><ArrowLeft size={14}/>Back to home</Link><ThemeToggle/></div><div className="flex flex-1 items-center justify-center py-10">{children}</div><p className="text-center text-xs text-slate-500">Your space to get things done.</p></section>
+ </main>;
+}

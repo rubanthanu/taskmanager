@@ -1,121 +1,25 @@
 "use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CheckSquare, ShieldCheck, LogOut, CheckCircle2 } from "lucide-react";
+import { CheckSquare, ShieldCheck, LogOut, CheckCircle2, ChevronRight, ArrowUpRight } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
-
 export default function Navbar({ user, onLogout, loggingOut }) {
-  const pathname = usePathname();
-
-  const getInitials = (name) => {
-    if (!name) return "U";
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .substring(0, 2);
-  };
-
-  return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200/90 bg-white/95 backdrop-blur-md transition-colors shadow-2xs">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between gap-4">
-          {/* Left Brand & Navigation */}
-          <div className="flex items-center gap-6 sm:gap-8">
-            <Link
-              href={user?.role === "ADMIN" ? "/admin" : "/tasks"}
-              className="flex items-center gap-2.5 group"
-            >
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-xs group-hover:scale-105 transition-all">
-                <CheckCircle2 className="h-5 w-5" />
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-lg tracking-tight text-slate-900">
-                    TaskFlow
-                  </span>
-                  <span className="text-[10px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/80">
-                    Pro
-                  </span>
-                </div>
-              </div>
-            </Link>
-
-            {/* Nav Links */}
-            <nav className="hidden md:flex items-center gap-1.5">
-              <Link
-                href="/tasks"
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
-                  pathname === "/tasks"
-                    ? "bg-slate-100 text-slate-900 font-semibold"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                }`}
-              >
-                <CheckSquare className="h-4 w-4" />
-                <span>My Tasks</span>
-              </Link>
-
-              {user?.role === "ADMIN" && (
-                <Link
-                  href="/admin"
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
-                    pathname === "/admin"
-                      ? "bg-violet-50 text-violet-700 font-semibold"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                  }`}
-                >
-                  <ShieldCheck className="h-4 w-4" />
-                  <span>Admin Panel</span>
-                </Link>
-              )}
-            </nav>
-          </div>
-
-          {/* Right Controls & Profile */}
-          <div className="flex items-center gap-3 sm:gap-4">
-            <ThemeToggle />
-
-            {user && (
-              <div className="flex items-center gap-3 pl-2 sm:pl-3 border-l border-slate-200">
-                <div className="flex items-center gap-2.5">
-                  <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 font-semibold text-xs text-white shadow-xs">
-                    {getInitials(user.name)}
-                    <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
-                  </div>
-                  <div className="hidden lg:flex flex-col text-left">
-                    <span className="text-sm font-semibold leading-tight text-slate-900">
-                      {user.name}
-                    </span>
-                    <span className="text-[11px] text-slate-500 flex items-center gap-1">
-                      {user.role === "ADMIN" ? (
-                        <span className="text-violet-700 font-semibold">Administrator</span>
-                      ) : (
-                        <span>Team Member</span>
-                      )}
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  id="logout-btn"
-                  onClick={onLogout}
-                  disabled={loggingOut}
-                  title="Sign out of your account"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-rose-600 hover:bg-rose-50 hover:border-rose-200 border border-slate-200 bg-white transition-all disabled:opacity-50 shadow-2xs"
-                >
-                  <LogOut className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">
-                    {loggingOut ? "Signing out..." : "Logout"}
-                  </span>
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </header>
-  );
+ const pathname = usePathname();
+ const initials = (user?.name || "User").split(" ").map(n => n[0]).join("").slice(0,2).toUpperCase();
+ const links = user?.role === "ADMIN" ? [{href:"/admin",label:"Admin Panel",icon:ShieldCheck}] : [{href:"/tasks",label:"My Tasks",icon:CheckSquare}];
+ return <>
+ <aside className="fixed inset-y-0 left-0 z-40 hidden w-[232px] flex-col border-r border-slate-200 bg-[var(--card)] px-5 py-7 lg:flex">
+ <Link href={links[0].href} className="flex items-center gap-2.5 px-2 font-semibold text-xl tracking-tight"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-700 text-white"><CheckCircle2 size={20}/></span>TaskFlow</Link>
+ <div className="mt-10 mb-4 flex items-center gap-3 rounded-xl border border-slate-200 p-3"><span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-xs font-semibold">{initials}</span><div className="min-w-0"><p className="truncate text-xs font-semibold">Personal workspace</p><p className="mt-1 text-[11px] text-slate-500">{user?.role === "ADMIN" ? "Administrator" : "Team Member"}</p></div></div>
+ <p className="px-3 py-3 text-[10px] font-medium uppercase tracking-[.14em] text-slate-500">Workspace</p>
+ <nav aria-label="Workspace navigation" className="space-y-1">{links.map(({href,label,icon:Icon}) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined} className={"flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-colors " + (pathname === href ? "bg-teal-50 text-teal-700" : "text-slate-600 hover:bg-slate-50")}><Icon size={18}/>{label}</Link>)}</nav>
+ <div className="mt-auto rounded-xl bg-slate-50 p-4"><CheckCircle2 className="text-teal-700" size={20}/><p className="mt-3 text-sm font-medium">One task at a time.</p><p className="mt-1 text-xs leading-relaxed text-slate-500">Keep the next step clear, and the big picture in view.</p><Link href="/" className="mt-4 flex items-center gap-2 text-xs font-medium text-teal-700">About TaskFlow<ArrowUpRight size={14}/></Link></div>
+ <div className="mt-5 flex items-center gap-3 px-2"><span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-teal-700 text-white text-xs font-medium">{initials}</span><div className="min-w-0"><p className="truncate text-xs font-semibold">{user?.name}</p><p className="truncate mt-1 text-[11px] text-slate-500">{user?.email}</p></div></div>
+ </aside>
+ <header className="sticky top-0 z-30 border-b border-slate-200 bg-[var(--card)]"><div className="flex h-[72px] items-center justify-between gap-3 px-4 sm:px-6 lg:px-10">
+ <div className="hidden items-center gap-2 text-xs text-slate-500 lg:flex">Workspace<ChevronRight size={13}/><span className="font-medium text-slate-800">{pathname === "/admin" ? "Admin Panel" : "My Tasks"}</span></div>
+ <Link href={links[0].href} className="flex items-center gap-2 text-base font-semibold lg:hidden"><CheckCircle2 className="text-teal-700" size={23}/>TaskFlow</Link>
+ <div className="flex items-center gap-3"><span className="hidden text-xs text-slate-500 sm:block">Your space to get things done</span><ThemeToggle/><button type="button" id="logout-btn" onClick={onLogout} disabled={loggingOut} aria-label="Sign out" className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50"><LogOut size={14}/><span className="hidden sm:inline">{loggingOut ? "Signing out..." : "Logout"}</span></button></div>
+ </div></header>
+ </>;
 }

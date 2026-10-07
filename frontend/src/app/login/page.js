@@ -16,7 +16,7 @@ import {
   Shield,
   Zap,
 } from "lucide-react";
-import ThemeToggle from "../../components/ThemeToggle";
+import AuthShell from "../../components/AuthShell";
 
 function LoginForm() {
   const router = useRouter();
@@ -65,20 +65,20 @@ function LoginForm() {
   return (
     <div className="w-full max-w-md">
       {/* Brand Icon & Heading */}
-      <div className="mb-8 text-center">
-        <div className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 mb-3.5">
+      <div className="mb-8 text-left">
+        <div className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-teal-600 text-white shadow-md shadow-teal-600/20 mb-3.5">
           <CheckCircle2 className="h-7 w-7" />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900">
           Sign in to TaskFlow
         </h1>
         <p className="mt-1.5 text-sm text-slate-500">
-          Access your tasks and high-performance workflow dashboard
+          Welcome back. Pick up where you left off.
         </p>
       </div>
 
       {/* Main Professional White Card */}
-      <div className="rounded-2xl border border-slate-200/90 bg-white p-7 sm:p-9 shadow-lg shadow-slate-900/5">
+      <div className="rounded-2xl border border-slate-200 bg-[var(--card)] p-6 sm:p-8 shadow-xs">
         {justRegistered && !error && (
           <div className="mb-5 flex items-start gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50 p-3.5 text-xs text-emerald-800">
             <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-emerald-600" />
@@ -119,7 +119,7 @@ function LoginForm() {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 required
-                className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:bg-[var(--card)] focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all"
               />
             </div>
           </div>
@@ -146,11 +146,13 @@ function LoginForm() {
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 required
-                className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-10 pr-10 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-10 pr-10 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:bg-[var(--card)] focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-pressed={showPassword}
                 className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 hover:text-slate-600 focus:outline-none"
               >
                 {showPassword ? (
@@ -167,7 +169,7 @@ function LoginForm() {
             type="submit"
             id="login-submit-btn"
             disabled={loading}
-            className="group relative flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition-all duration-150 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-200 active:scale-[0.99] disabled:opacity-60"
+            className="group relative flex w-full items-center justify-center gap-2 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition-all duration-150 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-200 active:scale-[0.99] disabled:opacity-60"
           >
             {loading ? (
               <>
@@ -187,14 +189,14 @@ function LoginForm() {
         <div className="mt-7 pt-6 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
           <span className="flex items-center gap-1.5 font-medium">
             <Shield className="h-3.5 w-3.5 text-emerald-600" />
-            JWT Encrypted
+            Private workspace
           </span>
           <span className="flex items-center gap-1.5 font-medium">
             <Zap className="h-3.5 w-3.5 text-amber-500" />
-            Fast Sync
+            Task tracking
           </span>
           <span className="flex items-center gap-1.5 font-medium">
-            <Sparkles className="h-3.5 w-3.5 text-indigo-600" />
+            <Sparkles className="h-3.5 w-3.5 text-teal-600" />
             Kanban Boards
           </span>
         </div>
@@ -205,7 +207,7 @@ function LoginForm() {
         Don&apos;t have an account?{" "}
         <Link
           href="/register"
-          className="font-semibold text-indigo-600 hover:text-indigo-700 underline-offset-4 hover:underline"
+          className="font-semibold text-teal-600 hover:text-teal-700 underline-offset-4 hover:underline"
         >
           Create an account
         </Link>
@@ -216,22 +218,18 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center p-4 sm:p-6 bg-[#f8fafc] overflow-hidden">
-      {/* Top Bar for Theme Switcher */}
-      <div className="absolute top-6 right-6">
-        <ThemeToggle />
-      </div>
+    <AuthShell>
 
       <Suspense
         fallback={
           <div className="flex items-center gap-2 text-sm text-slate-500">
-            <Loader2 className="h-4 w-4 animate-spin text-indigo-600" />
+            <Loader2 className="h-4 w-4 animate-spin text-teal-600" />
             <span>Loading...</span>
           </div>
         }
       >
         <LoginForm />
       </Suspense>
-    </main>
+    </AuthShell>
   );
 }

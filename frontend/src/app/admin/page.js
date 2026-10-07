@@ -20,6 +20,7 @@ import {
   Check,
   Layers,
 } from "lucide-react";
+import WorkspaceLoading from "../../components/WorkspaceLoading";
 import Navbar from "../../components/Navbar";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
@@ -208,23 +209,11 @@ export default function AdminPage() {
     });
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] text-slate-500">
-        <div className="relative flex h-14 w-14 items-center justify-center">
-          <div className="absolute h-full w-full rounded-full border-3 border-indigo-600/20 border-t-indigo-600 animate-spin" />
-          <ShieldCheck className="h-5 w-5 text-indigo-600" />
-        </div>
-        <p className="mt-4 text-xs font-semibold tracking-wider uppercase text-slate-500">
-          Loading Admin Control Center...
-        </p>
-      </div>
-    );
-  }
+  if (loading) return <WorkspaceLoading />;
 
   if (!admin) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8fafc] p-6">
+      <div className="min-h-[100dvh] flex items-center justify-center bg-[var(--background)] p-6">
         <p role="alert" className="text-rose-600 font-medium">
           {error || "Authenticating administrator access..."}
         </p>
@@ -233,23 +222,23 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 transition-colors">
+    <div className="app-shell min-h-[100dvh] flex flex-col bg-[var(--background)] text-slate-900 transition-colors">
       <Navbar user={admin} onLogout={handleLogout} loggingOut={loggingOut} />
 
-      <main className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 space-y-7">
+      <main className="workspace-main flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10 py-8 space-y-7">
         {/* Admin Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
           <div>
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-violet-50 text-violet-700 border border-violet-200">
+              <div className="p-2 rounded-xl bg-teal-50 text-teal-700 border border-teal-200">
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+                <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900">
                   System Administration
                 </h1>
                 <p className="text-sm text-slate-500">
-                  Global tenant analytics, account directory, and cross-user task oversight
+                  Manage your members and keep an eye on workspace activity.
                 </p>
               </div>
             </div>
@@ -258,7 +247,7 @@ export default function AdminPage() {
           {/* System Status Badge */}
           <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 text-xs font-semibold self-start sm:self-center">
             <span className="h-2 w-2 rounded-full bg-emerald-600 animate-pulse" />
-            <span>Database Connected & Synced</span>
+            <span>Workspace loaded</span>
           </div>
         </div>
 
@@ -274,17 +263,17 @@ export default function AdminPage() {
         )}
 
         {/* Executive KPI Overview Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
-          <div className="p-5 rounded-xl border border-slate-200/90 bg-white shadow-xs">
+        <div className="metric-grid grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+          <div className="p-5 rounded-xl border border-slate-200/90 bg-[var(--card)] shadow-xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Total Users
               </span>
-              <div className="p-2 rounded-lg bg-indigo-50 text-indigo-700">
+              <div className="p-2 rounded-lg bg-teal-50 text-teal-700">
                 <Users className="h-4 w-4" />
               </div>
             </div>
-            <p className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">
+            <p className="mt-2 text-2xl sm:text-3xl font-semibold text-slate-900">
               {systemMetrics.totalUsers}
             </p>
             <p className="mt-1 text-xs text-slate-500 font-medium">
@@ -292,16 +281,16 @@ export default function AdminPage() {
             </p>
           </div>
 
-          <div className="p-5 rounded-xl border border-slate-200/90 bg-white shadow-xs">
+          <div className="p-5 rounded-xl border border-slate-200/90 bg-[var(--card)] shadow-xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Total Tasks
               </span>
-              <div className="p-2 rounded-lg bg-violet-50 text-violet-700">
+              <div className="p-2 rounded-lg bg-teal-50 text-teal-700">
                 <CheckSquare className="h-4 w-4" />
               </div>
             </div>
-            <p className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">
+            <p className="mt-2 text-2xl sm:text-3xl font-semibold text-slate-900">
               {systemMetrics.totalTasks}
             </p>
             <p className="mt-1 text-xs text-slate-500 font-medium">
@@ -309,7 +298,7 @@ export default function AdminPage() {
             </p>
           </div>
 
-          <div className="p-5 rounded-xl border border-slate-200/90 bg-white shadow-xs">
+          <div className="p-5 rounded-xl border border-slate-200/90 bg-[var(--card)] shadow-xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Global Completion
@@ -318,7 +307,7 @@ export default function AdminPage() {
                 <TrendingUp className="h-4 w-4" />
               </div>
             </div>
-            <p className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">
+            <p className="mt-2 text-2xl sm:text-3xl font-semibold text-slate-900">
               {systemMetrics.completionRate}%
             </p>
             <p className="mt-1 text-xs text-slate-500 font-medium">
@@ -326,7 +315,7 @@ export default function AdminPage() {
             </p>
           </div>
 
-          <div className="p-5 rounded-xl border border-slate-200/90 bg-white shadow-xs">
+          <div className="p-5 rounded-xl border border-slate-200/90 bg-[var(--card)] shadow-xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Active in Flight
@@ -335,7 +324,7 @@ export default function AdminPage() {
                 <Layers className="h-4 w-4" />
               </div>
             </div>
-            <p className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">
+            <p className="mt-2 text-2xl sm:text-3xl font-semibold text-slate-900">
               {systemMetrics.inProgressTasks + systemMetrics.todoTasks}
             </p>
             <p className="mt-1 text-xs text-slate-500 font-medium">
@@ -350,15 +339,16 @@ export default function AdminPage() {
             <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
               type="text"
+              aria-label="Search accounts"
               placeholder="Search by name, email, or task..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 shadow-2xs"
+              className="w-full rounded-xl border border-slate-200 bg-[var(--card)] pl-10 pr-4 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-600 focus:ring-2 focus:ring-teal-100 shadow-2xs"
             />
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="flex items-center rounded-xl border border-slate-200 bg-white p-1 shadow-2xs">
+            <div className="flex items-center rounded-xl border border-slate-200 bg-[var(--card)] p-1 shadow-2xs">
               {[
                 { label: "All Accounts", value: "ALL" },
                 { label: "Admins", value: "ADMIN" },
@@ -367,9 +357,10 @@ export default function AdminPage() {
                 <button
                   key={tab.value}
                   onClick={() => setRoleFilter(tab.value)}
+                  aria-pressed={roleFilter === tab.value}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                     roleFilter === tab.value
-                      ? "bg-slate-900 text-white shadow-xs"
+                      ? "bg-teal-700 text-white shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
@@ -383,7 +374,7 @@ export default function AdminPage() {
         {/* User Directory List */}
         <div className="space-y-3.5">
           {filteredUsers.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 p-12 text-center bg-white shadow-xs">
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 p-12 text-center bg-[var(--card)] shadow-xs">
               <Users className="h-10 w-10 text-slate-400 mb-2" />
               <p className="font-semibold text-slate-800">
                 No matching accounts found
@@ -404,7 +395,7 @@ export default function AdminPage() {
               return (
                 <section
                   key={u.id}
-                  className="rounded-xl border border-slate-200/90 bg-white shadow-xs hover:border-slate-300 transition-all overflow-hidden"
+                  className="rounded-xl border border-slate-200/90 bg-[var(--card)] shadow-xs hover:border-slate-300 transition-all overflow-hidden"
                 >
                   {/* User Header Summary Bar */}
                   <div
@@ -413,7 +404,7 @@ export default function AdminPage() {
                   >
                     <div className="flex items-center gap-3.5">
                       {/* Avatar */}
-                      <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-600 font-bold text-sm text-white shadow-xs">
+                      <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-teal-600 font-bold text-sm text-white shadow-xs">
                         {u.name
                           .split(" ")
                           .map((n) => n[0])
@@ -428,7 +419,7 @@ export default function AdminPage() {
                             {u.name}
                           </h2>
                           {u.role === "ADMIN" ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-50 text-violet-700 border border-violet-200">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-200">
                               <ShieldCheck className="h-3 w-3" />
                               Admin
                             </span>
@@ -450,7 +441,7 @@ export default function AdminPage() {
                             title="Click to copy email"
                           >
                             <Mail className="h-3.5 w-3.5 text-slate-400" />
-                            <span>{u.email}</span>
+                            <span className="break-all">{u.email}</span>
                             {copiedEmail === u.email ? (
                               <Check className="h-3 w-3 text-emerald-600" />
                             ) : (
@@ -481,7 +472,7 @@ export default function AdminPage() {
                         </div>
                         <div className="w-16 bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200 hidden sm:block">
                           <div
-                            className="bg-indigo-600 h-full rounded-full"
+                            className="bg-teal-600 h-full rounded-full"
                             style={{ width: `${userRate}%` }}
                           />
                         </div>
@@ -489,7 +480,9 @@ export default function AdminPage() {
 
                       <button
                         type="button"
-                        className="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:text-slate-700 bg-white"
+                        aria-label={(isExpanded ? "Hide tasks for " : "Show tasks for ") + u.name}
+                        aria-expanded={isExpanded}
+                        className="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:text-slate-700 bg-[var(--card)]"
                       >
                         {isExpanded ? (
                           <ChevronUp className="h-4 w-4" />
@@ -509,7 +502,7 @@ export default function AdminPage() {
                       </div>
 
                       {u.tasks.length === 0 ? (
-                        <div className="py-5 text-center text-xs text-slate-400 border border-dashed border-slate-200 rounded-xl bg-white">
+                        <div className="py-5 text-center text-xs text-slate-400 border border-dashed border-slate-200 rounded-xl bg-[var(--card)]">
                           No tasks logged by this user yet.
                         </div>
                       ) : (
@@ -517,7 +510,7 @@ export default function AdminPage() {
                           {u.tasks.map((task) => (
                             <div
                               key={task.id}
-                              className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-xl border border-slate-200/90 bg-white p-3 shadow-2xs"
+                              className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-xl border border-slate-200/90 bg-[var(--card)] p-3 shadow-2xs"
                             >
                               <div className="flex-1 min-w-0">
                                 <h3 className="font-semibold text-sm text-slate-900 break-words">
@@ -563,7 +556,7 @@ function AdminTaskStatusBadge({ status }) {
   }
   if (status === "IN_PROGRESS") {
     return (
-      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-teal-50 text-teal-700 border border-teal-200">
         <PlayCircle className="h-3 w-3" />
         In Progress
       </span>

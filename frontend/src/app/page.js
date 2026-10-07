@@ -1,135 +1,18 @@
-"use client";
-
 import Link from "next/link";
-import {
-  CheckCircle2,
-  ArrowRight,
-  Sparkles,
-  Kanban,
-  ShieldCheck,
-  Zap,
-} from "lucide-react";
+import { CheckCircle2, ArrowRight, Kanban, ShieldCheck, ListChecks, ArrowUpRight } from "lucide-react";
 import ThemeToggle from "../components/ThemeToggle";
-
-export default function HomePage() {
-  return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 overflow-hidden">
-      {/* Navigation Header */}
-      <header className="sticky top-0 z-40 w-full border-b border-slate-200/90 bg-white/95 backdrop-blur-md shadow-2xs">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-xs">
-              <CheckCircle2 className="h-5 w-5" />
-            </div>
-            <span className="font-bold text-lg tracking-tight text-slate-900">
-              TaskFlow
-            </span>
-          </Link>
-
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
-            <Link
-              href="/login"
-              className="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
-            >
-              Sign in
-            </Link>
-            <Link
-              href="/register"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold shadow-xs hover:bg-indigo-700 active:scale-95 transition-all"
-            >
-              <span>Get Started</span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <main className="flex-1 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 pt-16 pb-20 max-w-5xl mx-auto text-center">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-indigo-200 bg-indigo-50 text-indigo-700 text-xs font-semibold mb-6">
-          <Sparkles className="h-3.5 w-3.5" />
-          <span>Professional Task & Project Management</span>
-        </div>
-
-        {/* Headline */}
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 max-w-3xl leading-[1.15]">
-          Organize, execute, and deliver tasks with{" "}
-          <span className="text-indigo-600">
-            pure clarity.
-          </span>
-        </h1>
-
-        <p className="mt-5 text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
-          Clean task management featuring interactive Kanban boards,
-          real-time workspace completion tracking, and granular administrative governance.
-        </p>
-
-        {/* Action CTAs */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center gap-3.5">
-          <Link
-            href="/register"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-indigo-600 text-white font-semibold text-sm shadow-xs hover:bg-indigo-700 active:scale-95 transition-all"
-          >
-            <span>Start Free Workspace</span>
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-          <Link
-            href="/login"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 font-semibold text-sm hover:bg-slate-50 active:scale-95 transition-all shadow-2xs"
-          >
-            <span>Sign In to Dashboard</span>
-          </Link>
-        </div>
-
-        {/* Feature Highlights Grid */}
-        <div className="mt-16 w-full grid grid-cols-1 md:grid-cols-3 gap-5 text-left">
-          <div className="p-5 sm:p-6 rounded-xl border border-slate-200/90 bg-white shadow-xs">
-            <div className="h-10 w-10 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center mb-3.5">
-              <Kanban className="h-5 w-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900">
-              Interactive Kanban & List
-            </h3>
-            <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
-              Switch smoothly between Kanban lane boards and compact lists.
-              Advance tasks with one-click status transitions.
-            </p>
-          </div>
-
-          <div className="p-5 sm:p-6 rounded-xl border border-slate-200/90 bg-white shadow-xs">
-            <div className="h-10 w-10 rounded-xl bg-violet-50 text-violet-700 flex items-center justify-center mb-3.5">
-              <ShieldCheck className="h-5 w-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900">
-              Role-Based Governance
-            </h3>
-            <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
-              Strict isolation separating member task management from
-              tenant-wide administrative directories and user oversight.
-            </p>
-          </div>
-
-          <div className="p-5 sm:p-6 rounded-xl border border-slate-200/90 bg-white shadow-xs">
-            <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-3.5">
-              <Zap className="h-5 w-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900">
-              Productivity Tracking
-            </h3>
-            <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
-              Real-time workspace completion rates, lane counts, and
-              rewarding celebratory feedback as you complete items.
-            </p>
-          </div>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-200/80 py-6 text-center text-xs text-slate-500">
-        <p>© 2026 TaskFlow. Professional task and workflow software.</p>
-      </footer>
-    </div>
-  );
+import WorkspaceDemo from "../components/WorkspaceDemo";
+export default function HomePage(){
+ return <div className="min-h-[100dvh] bg-[var(--background)] text-slate-900">
+ <header className="sticky top-0 z-30 border-b border-slate-200 bg-[var(--card)]"><div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-3 px-5 sm:px-8"><Link href="/" className="flex items-center gap-2.5 text-xl font-semibold tracking-tight"><span className="flex size-9 items-center justify-center rounded-xl bg-teal-700 text-white"><CheckCircle2 size={20}/></span>TaskFlow</Link><nav aria-label="Main navigation" className="hidden items-center gap-7 text-sm text-slate-600 md:flex"><a href="#workspace" className="hover:text-teal-700">Workspace</a><a href="#features" className="hover:text-teal-700">Features</a></nav><div className="flex items-center gap-3"><ThemeToggle/><Link href="/login" className="text-sm font-medium text-slate-600 hover:text-teal-700">Sign in</Link><Link href="/register" className="hidden items-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-800 sm:inline-flex">Get started<ArrowUpRight size={15}/></Link></div></div></header>
+ <main>
+ <section className="mx-auto grid max-w-7xl gap-8 px-5 pt-16 pb-14 sm:px-8 lg:grid-cols-[1.5fr_1fr] lg:gap-16 lg:pt-20 lg:pb-20">
+ <div><p className="mb-6 flex items-center gap-2 text-xs font-medium text-teal-700"><span className="size-1.5 rounded-full bg-teal-600"/>A clearer way to work</p><h1 className="text-5xl font-medium leading-[1.08] tracking-[-.045em] sm:text-6xl lg:text-[68px]">Less scattered.<br/><span className="text-teal-700">More accomplished.</span></h1><p className="mt-6 max-w-md text-base leading-relaxed text-slate-500">Bring your tasks, priorities, and progress into one calm workspace. Make your next step a little clearer.</p><div className="mt-8 flex flex-wrap items-center gap-4"><Link href="/register" className="inline-flex items-center gap-3 rounded-lg bg-teal-700 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-teal-800">Get started<ArrowRight size={16}/></Link><a href="#workspace" className="inline-flex items-center gap-2 px-2 py-3 text-sm font-medium text-slate-700 hover:text-teal-700">Explore the workspace<ArrowRight size={16}/></a></div></div>
+ <div className="flex flex-col justify-end border-l border-slate-200 pl-7 max-lg:mt-3 lg:pb-2"><span className="mb-5 flex size-12 items-center justify-center rounded-2xl border border-teal-200 bg-teal-50 text-teal-700"><ListChecks size={24}/></span><h2 className="max-w-xs text-2xl font-medium leading-snug tracking-tight">Good work starts with<br className="hidden lg:block"/> a clear head.</h2><p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-500">Capture what matters. See what is moving. Finish the day knowing what you accomplished.</p><a href="#workspace" className="mt-6 inline-flex items-center gap-2 text-xs font-medium text-teal-700">Try the interactive board<ArrowUpRight size={14}/></a></div>
+ </section>
+ <section id="workspace" className="mx-auto max-w-7xl px-5 pb-20 sm:px-8"><WorkspaceDemo/></section>
+ <section id="features" className="border-t border-slate-200 bg-[var(--card)]"><div className="mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_1.3fr]"><div><h2 className="max-w-sm text-3xl font-medium leading-tight tracking-tight">A place for everything.<br/><span className="text-slate-500">Space to focus.</span></h2><p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-500">Just the tools you need to move work forward, without adding more to your day.</p></div><div className="divide-y divide-slate-200">{[{icon:Kanban,title:"Your work, your view",text:"Switch between a Kanban board and a focused list. Move tasks forward with a click."},{icon:ListChecks,title:"Progress you can see",text:"Keep track of what is waiting, what is in motion, and what is finished."},{icon:ShieldCheck,title:"A workspace you can manage",text:"Personal task spaces for members. A dedicated overview for administrators."}].map(({icon:Icon,title,text})=><div key={title} className="flex gap-5 py-6 first:pt-0 last:pb-0"><Icon size={21} className="mt-1 shrink-0 text-teal-700"/><div><h3 className="text-base font-medium">{title}</h3><p className="mt-2 max-w-md text-sm leading-relaxed text-slate-500">{text}</p></div></div>)}</div></div></section>
+ </main>
+ <footer className="border-t border-slate-200"><div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-5 py-6 text-xs text-slate-500 sm:flex-row sm:px-8"><span>© 2026 TaskFlow. Professional task and workflow software.</span><div className="flex items-center gap-5"><Link href="/login" className="hover:text-teal-700">Sign in</Link><Link href="/register" className="hover:text-teal-700">Get started</Link></div></div></footer>
+ </div>;
 }

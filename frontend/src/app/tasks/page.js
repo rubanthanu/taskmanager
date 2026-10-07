@@ -8,22 +8,19 @@ import {
   PlayCircle,
   Plus,
   Search,
-  Filter,
   Kanban,
   List,
   Trash2,
   Edit3,
-  Check,
   X,
-  ArrowRight,
-  Sparkles,
   Calendar,
   AlertCircle,
-  ChevronRight,
   Inbox,
   CheckSquare,
-  RotateCcw,
 } from "lucide-react";
+import { KanbanColumn, StatusBadge } from "../../components/TaskBoard";
+import WorkspaceLoading from "../../components/WorkspaceLoading";
+import Dialog from "../../components/Dialog";
 import Navbar from "../../components/Navbar";
 import { triggerTaskCelebration } from "../../lib/confetti";
 
@@ -284,7 +281,7 @@ export default function TasksPage() {
 
       if (nextStatus === "DONE") {
         triggerTaskCelebration();
-        showToast("Task completed! 🎉");
+        showToast("Task completed! ");
       } else {
         showToast(`Moved to ${nextStatus === "IN_PROGRESS" ? "In Progress" : "To Do"}`);
       }
@@ -369,23 +366,11 @@ export default function TasksPage() {
     });
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 text-slate-500">
-        <div className="relative flex h-14 w-14 items-center justify-center">
-          <div className="absolute h-full w-full rounded-full border-3 border-indigo-600/20 border-t-indigo-600 animate-spin" />
-          <CheckSquare className="h-5 w-5 text-indigo-600" />
-        </div>
-        <p className="mt-4 text-xs font-semibold tracking-wider uppercase text-slate-500">
-          Loading workspace...
-        </p>
-      </div>
-    );
-  }
+  if (loading) return <WorkspaceLoading />;
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+      <div className="min-h-[100dvh] flex items-center justify-center bg-slate-50 p-6">
         <p role="alert" className="text-rose-600 font-medium">
           {error || "Authenticating session..."}
         </p>
@@ -394,37 +379,38 @@ export default function TasksPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 transition-colors">
+    <div className="app-shell min-h-[100dvh] flex flex-col bg-[var(--background)] text-slate-900 transition-colors">
       <Navbar user={user} onLogout={handleLogout} loggingOut={loggingOut} />
 
       {/* Floating Success Toast */}
       {successToast && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-xl border border-slate-900/10 bg-slate-900 text-white px-4 py-3 shadow-xl backdrop-blur-md animate-in slide-in-from-bottom-4 duration-200">
+        <div role="status"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-xl border border-slate-900/10 bg-teal-700 text-white px-4 py-3 shadow-xl backdrop-blur-md animate-in slide-in-from-bottom-4 duration-200">
           <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
           <span className="text-xs font-medium">{successToast}</span>
         </div>
       )}
 
-      <main className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 space-y-7">
+      <main className="workspace-main flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10 py-8 space-y-7">
         {/* Workspace Header & Productivity KPI Overview */}
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
             <div>
               <div className="flex items-center gap-2.5">
-                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+                <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900">
                   My Tasks
                 </h1>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/80">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-200/80">
                   {metrics.total} {metrics.total === 1 ? "task" : "tasks"}
                 </span>
               </div>
               <p className="mt-1 text-sm text-slate-500">
-                Manage, prioritize, and complete your projects with high clarity.
+                A little structure. A lot more focus.
               </p>
             </div>
 
             {/* Quick Completion Pill */}
-            <div className="flex items-center gap-4 px-4 py-2.5 rounded-xl border border-slate-200/90 bg-white shadow-xs">
+            <div className="flex items-center gap-4 px-4 py-2.5 rounded-xl border border-slate-200/90 bg-[var(--card)] shadow-xs">
               <div className="flex flex-col">
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
                   Workspace Completion
@@ -435,7 +421,7 @@ export default function TasksPage() {
               </div>
               <div className="w-24 bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200">
                 <div
-                  className="bg-indigo-600 h-full rounded-full transition-all duration-500"
+                  className="bg-teal-600 h-full rounded-full transition-all duration-500"
                   style={{ width: `${metrics.rate}%` }}
                 />
               </div>
@@ -443,8 +429,8 @@ export default function TasksPage() {
           </div>
 
           {/* Metric KPI Cards - Professional White Look */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
-            <div className="p-4 sm:p-5 rounded-xl border border-slate-200/90 bg-white shadow-xs hover:border-slate-300 transition-all">
+          <div className="metric-grid grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+            <div className="p-4 sm:p-5 rounded-xl border border-slate-200/90 bg-[var(--card)] shadow-xs hover:border-slate-300 transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Total Tasks
@@ -453,12 +439,12 @@ export default function TasksPage() {
                   <CheckSquare className="h-4 w-4" />
                 </div>
               </div>
-              <p className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">
+              <p className="mt-2 text-2xl sm:text-3xl font-semibold text-slate-900">
                 {metrics.total}
               </p>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-xl border border-amber-200/90 bg-white shadow-xs hover:border-amber-300 transition-all">
+            <div className="p-4 sm:p-5 rounded-xl border border-amber-200/90 bg-[var(--card)] shadow-xs hover:border-amber-300 transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-amber-700 uppercase tracking-wider">
                   To Do
@@ -467,26 +453,26 @@ export default function TasksPage() {
                   <Clock className="h-4 w-4" />
                 </div>
               </div>
-              <p className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">
+              <p className="mt-2 text-2xl sm:text-3xl font-semibold text-slate-900">
                 {metrics.todo}
               </p>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-xl border border-indigo-200/90 bg-white shadow-xs hover:border-indigo-300 transition-all">
+            <div className="p-4 sm:p-5 rounded-xl border border-teal-200/90 bg-[var(--card)] shadow-xs hover:border-teal-300 transition-all">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-indigo-700 uppercase tracking-wider">
+                <span className="text-xs font-semibold text-teal-700 uppercase tracking-wider">
                   In Progress
                 </span>
-                <div className="p-2 rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-200/60">
+                <div className="p-2 rounded-lg bg-teal-50 text-teal-600 border border-teal-200/60">
                   <PlayCircle className="h-4 w-4" />
                 </div>
               </div>
-              <p className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">
+              <p className="mt-2 text-2xl sm:text-3xl font-semibold text-slate-900">
                 {metrics.inProgress}
               </p>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-xl border border-emerald-200/90 bg-white shadow-xs hover:border-emerald-300 transition-all">
+            <div className="p-4 sm:p-5 rounded-xl border border-emerald-200/90 bg-[var(--card)] shadow-xs hover:border-emerald-300 transition-all">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">
                   Done
@@ -495,7 +481,7 @@ export default function TasksPage() {
                   <CheckCircle2 className="h-4 w-4" />
                 </div>
               </div>
-              <p className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">
+              <p className="mt-2 text-2xl sm:text-3xl font-semibold text-slate-900">
                 {metrics.done}
               </p>
             </div>
@@ -515,6 +501,7 @@ export default function TasksPage() {
             </div>
             <button
               onClick={() => setError("")}
+              aria-label="Dismiss notice"
               className="p-1 rounded-lg hover:bg-rose-100 text-rose-600"
             >
               <X className="h-4 w-4" />
@@ -523,19 +510,20 @@ export default function TasksPage() {
         )}
 
         {/* Create Task Card */}
-        <section className="rounded-xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-xs">
+        <section className="rounded-xl border border-slate-200/90 bg-[var(--card)] p-4 sm:p-5 shadow-xs">
           <form onSubmit={handleCreate} className="space-y-3.5">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <div className="relative flex-1">
+                <label htmlFor="task-title-input" className="block text-xs font-medium text-slate-600 mb-2">New task</label>
                 <input
                   id="task-title-input"
                   type="text"
                   value={title}
                   onChange={(event) => setTitle(event.target.value)}
-                  placeholder="What needs to get done? (e.g. Design executive review deck)"
+                  placeholder="What needs to get done?"
                   maxLength={200}
                   required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:bg-[var(--card)] focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all"
                 />
               </div>
 
@@ -545,8 +533,8 @@ export default function TasksPage() {
                   onClick={() => setShowDescriptionField(!showDescriptionField)}
                   className={`px-3 py-2.5 rounded-xl border text-xs font-semibold transition-all ${
                     showDescriptionField || description
-                      ? "border-indigo-300 bg-indigo-50 text-indigo-700"
-                      : "border-slate-200 hover:border-slate-300 bg-white text-slate-600"
+                      ? "border-teal-300 bg-teal-50 text-teal-700"
+                      : "border-slate-200 hover:border-slate-300 bg-[var(--card)] text-slate-600"
                   }`}
                 >
                   {showDescriptionField ? "Hide notes" : "+ Add notes"}
@@ -556,7 +544,7 @@ export default function TasksPage() {
                   type="submit"
                   id="create-task-btn"
                   disabled={saving || !title.trim()}
-                  className="flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-700 active:scale-[0.99] disabled:opacity-50 transition-all shrink-0"
+                  className="flex items-center justify-center gap-2 rounded-xl bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-teal-700 active:scale-[0.99] disabled:opacity-50 transition-all shrink-0"
                 >
                   <Plus className="h-4 w-4" />
                   <span>{saving ? "Adding..." : "Add Task"}</span>
@@ -567,13 +555,14 @@ export default function TasksPage() {
             {/* Expandable Description Area */}
             {showDescriptionField && (
               <div className="animate-in fade-in slide-in-from-top-2 duration-150">
+                <label htmlFor="task-description-input" className="block text-xs font-medium text-slate-600 mb-2">Notes</label>
                 <textarea
                   id="task-description-input"
                   value={description}
                   onChange={(event) => setDescription(event.target.value)}
                   placeholder="Optional details, notes, or acceptance criteria..."
                   rows={2}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:bg-[var(--card)] focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all"
                 />
               </div>
             )}
@@ -587,14 +576,16 @@ export default function TasksPage() {
             <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
               type="text"
+              aria-label="Search tasks"
               placeholder="Search tasks..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-8 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 shadow-2xs"
+              className="w-full rounded-xl border border-slate-200 bg-[var(--card)] pl-10 pr-8 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-600 focus:ring-2 focus:ring-teal-100 shadow-2xs"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
+                aria-label="Clear search"
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
               >
                 <X className="h-3.5 w-3.5" />
@@ -605,7 +596,7 @@ export default function TasksPage() {
           {/* Right: Filters & View Switch */}
           <div className="flex flex-wrap items-center gap-2.5">
             {/* Status Filter Chips */}
-            <div className="flex items-center rounded-xl border border-slate-200 bg-white p-1 shadow-2xs">
+            <div className="flex items-center rounded-xl border border-slate-200 bg-[var(--card)] p-1 shadow-2xs">
               {[
                 { label: "All", value: "ALL" },
                 { label: "To Do", value: "TODO" },
@@ -615,9 +606,10 @@ export default function TasksPage() {
                 <button
                   key={tab.value}
                   onClick={() => setStatusFilter(tab.value)}
+                  aria-pressed={statusFilter === tab.value}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                     statusFilter === tab.value
-                      ? "bg-slate-900 text-white shadow-xs"
+                      ? "bg-teal-700 text-white shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
@@ -628,9 +620,10 @@ export default function TasksPage() {
 
             {/* Sort Dropdown */}
             <select
+              aria-label="Sort tasks"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 shadow-2xs"
+              className="rounded-xl border border-slate-200 bg-[var(--card)] px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-teal-600 focus:ring-2 focus:ring-teal-100 shadow-2xs"
             >
               <option value="newest">Newest first</option>
               <option value="oldest">Oldest first</option>
@@ -638,14 +631,15 @@ export default function TasksPage() {
             </select>
 
             {/* View Mode Toggle: Board vs List */}
-            <div className="flex items-center rounded-xl border border-slate-200 bg-white p-1 shadow-2xs">
+            <div className="flex items-center rounded-xl border border-slate-200 bg-[var(--card)] p-1 shadow-2xs">
               <button
                 type="button"
                 onClick={() => setViewMode("board")}
+                aria-pressed={viewMode === "board"}
                 title="Kanban Board View"
                 className={`p-1.5 rounded-lg transition-all ${
                   viewMode === "board"
-                    ? "bg-slate-100 text-indigo-700 font-bold"
+                    ? "bg-slate-100 text-teal-700 font-bold"
                     : "text-slate-400 hover:text-slate-700"
                 }`}
               >
@@ -654,10 +648,11 @@ export default function TasksPage() {
               <button
                 type="button"
                 onClick={() => setViewMode("list")}
+                aria-pressed={viewMode === "list"}
                 title="List View"
                 className={`p-1.5 rounded-lg transition-all ${
                   viewMode === "list"
-                    ? "bg-slate-100 text-indigo-700 font-bold"
+                    ? "bg-slate-100 text-teal-700 font-bold"
                     : "text-slate-400 hover:text-slate-700"
                 }`}
               >
@@ -669,17 +664,18 @@ export default function TasksPage() {
 
         {/* Task Edit Modal Overlay */}
         {editingId && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in">
-            <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl animate-in zoom-in-95 duration-150">
+          <Dialog onClose={() => { if (!busy) setEditingId(null); }} labelledBy="edit-dialog-title">
+            <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-[var(--card)] p-6 shadow-2xl animate-in zoom-in-95 duration-150">
               <div className="flex items-center justify-between pb-4 border-b border-slate-200">
                 <div className="flex items-center gap-2">
-                  <Edit3 className="h-5 w-5 text-indigo-600" />
-                  <h3 className="font-bold text-lg text-slate-900">
+                  <Edit3 className="h-5 w-5 text-teal-600" />
+                  <h3 id="edit-dialog-title" className="font-bold text-lg text-slate-900">
                     Edit Task
                   </h3>
                 </div>
                 <button
                   onClick={() => setEditingId(null)}
+                  aria-label="Close task editor"
                   className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600"
                 >
                   <X className="h-5 w-5" />
@@ -700,7 +696,7 @@ export default function TasksPage() {
                     onChange={(e) => setEditTitle(e.target.value)}
                     required
                     maxLength={200}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-indigo-600 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-teal-600 focus:bg-[var(--card)] focus:ring-2 focus:ring-teal-100"
                   />
                 </div>
 
@@ -717,7 +713,7 @@ export default function TasksPage() {
                     onChange={(e) => setEditDescription(e.target.value)}
                     rows={3}
                     placeholder="Add detailed task notes or links..."
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 focus:outline-none focus:border-indigo-600 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 focus:outline-none focus:border-teal-600 focus:bg-[var(--card)] focus:ring-2 focus:ring-teal-100"
                   />
                 </div>
 
@@ -732,7 +728,7 @@ export default function TasksPage() {
                     id="edit-task-status"
                     value={editStatus}
                     onChange={(e) => setEditStatus(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-indigo-600 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-teal-600 focus:bg-[var(--card)] focus:ring-2 focus:ring-teal-100"
                   >
                     <option value="TODO">To Do</option>
                     <option value="IN_PROGRESS">In Progress</option>
@@ -752,25 +748,25 @@ export default function TasksPage() {
                   <button
                     type="submit"
                     disabled={busy || !editTitle.trim()}
-                    className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-sm font-semibold text-white shadow-xs disabled:opacity-50 transition-all"
+                    className="px-5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-sm font-semibold text-white shadow-xs disabled:opacity-50 transition-all"
                   >
                     {busy ? "Saving..." : "Save Changes"}
                   </button>
                 </div>
               </form>
             </div>
-          </div>
+          </Dialog>
         )}
 
         {/* Delete Confirmation Modal */}
         {taskToDelete && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in">
-            <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl animate-in zoom-in-95 duration-150">
+          <Dialog onClose={() => { if (!busy) setTaskToDelete(null); }} labelledBy="delete-dialog-title">
+            <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-[var(--card)] p-6 shadow-2xl animate-in zoom-in-95 duration-150">
               <div className="flex items-center gap-3 text-rose-600">
                 <div className="p-2.5 rounded-xl bg-rose-50 border border-rose-200">
                   <Trash2 className="h-5 w-5" />
                 </div>
-                <h3 className="font-bold text-lg text-slate-900">
+                <h3 id="delete-dialog-title" className="font-bold text-lg text-slate-900">
                   Delete Task?
                 </h3>
               </div>
@@ -800,13 +796,13 @@ export default function TasksPage() {
                 </button>
               </div>
             </div>
-          </div>
+          </Dialog>
         )}
 
         {/* Empty State */}
         {filteredTasks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 p-12 text-center bg-white shadow-xs">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 mb-4 border border-indigo-100">
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 p-12 text-center bg-[var(--card)] shadow-xs">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 text-teal-600 mb-4 border border-teal-100">
               <Inbox className="h-7 w-7" />
             </div>
             <h3 className="text-base font-bold text-slate-900">
@@ -833,7 +829,7 @@ export default function TasksPage() {
           </div>
         ) : viewMode === "board" ? (
           /* Kanban Board View - Clean Professional Columns */
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3 gap-5">
             {/* Column: To Do */}
             <KanbanColumn
               title="To Do"
@@ -852,8 +848,8 @@ export default function TasksPage() {
             <KanbanColumn
               title="In Progress"
               count={filteredTasks.filter((t) => t.status === "IN_PROGRESS").length}
-              icon={<PlayCircle className="h-4 w-4 text-indigo-600" />}
-              badgeColor="bg-indigo-50 text-indigo-700 border-indigo-200/80"
+              icon={<PlayCircle className="h-4 w-4 text-teal-600" />}
+              badgeColor="bg-teal-50 text-teal-700 border-teal-200/80"
               tasks={filteredTasks.filter((t) => t.status === "IN_PROGRESS")}
               onEdit={startEdit}
               onDelete={(task) => setTaskToDelete(task)}
@@ -882,7 +878,7 @@ export default function TasksPage() {
             {filteredTasks.map((task) => (
               <div
                 key={task.id}
-                className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-xs hover:shadow-sm hover:border-slate-300 transition-all"
+                className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-slate-200/90 bg-[var(--card)] p-4 sm:p-5 shadow-xs hover:shadow-sm hover:border-slate-300 transition-all"
               >
                 <div className="flex items-start gap-3.5 flex-1 min-w-0">
                   {/* Status Circle Button */}
@@ -903,9 +899,9 @@ export default function TasksPage() {
                     {task.status === "DONE" ? (
                       <CheckCircle2 className="h-5 w-5 text-emerald-600" />
                     ) : task.status === "IN_PROGRESS" ? (
-                      <PlayCircle className="h-5 w-5 text-indigo-600" />
+                      <PlayCircle className="h-5 w-5 text-teal-600" />
                     ) : (
-                      <div className="h-5 w-5 rounded-full border-2 border-slate-300 hover:border-indigo-600" />
+                      <div className="h-5 w-5 rounded-full border-2 border-slate-300 hover:border-teal-600" />
                     )}
                   </button>
 
@@ -964,169 +960,5 @@ export default function TasksPage() {
         )}
       </main>
     </div>
-  );
-}
-
-// Kanban Column Component
-function KanbanColumn({
-  title,
-  count,
-  icon,
-  badgeColor,
-  tasks,
-  onEdit,
-  onDelete,
-  onQuickStatus,
-  busy,
-  formatDate,
-}) {
-  return (
-    <div className="flex flex-col rounded-2xl border border-slate-200/80 bg-slate-100/60 p-3.5 sm:p-4 min-h-[420px]">
-      {/* Column Header */}
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200">
-        <div className="flex items-center gap-2">
-          {icon}
-          <h2 className="font-bold text-sm tracking-wide text-slate-800">
-            {title}
-          </h2>
-        </div>
-        <span
-          className={`px-2 py-0.5 rounded-full text-xs font-bold border shadow-2xs ${badgeColor}`}
-        >
-          {count}
-        </span>
-      </div>
-
-      {/* Cards List */}
-      <div className="flex-1 space-y-3">
-        {tasks.map((task) => (
-          <div
-            key={task.id}
-            className="group rounded-xl border border-slate-200/90 bg-white p-4 shadow-xs hover:shadow-md hover:border-slate-300 transition-all duration-150"
-          >
-            <div className="flex items-start justify-between gap-2">
-              <h3
-                className={`font-semibold text-sm leading-snug break-words ${
-                  task.status === "DONE"
-                    ? "line-through text-slate-400"
-                    : "text-slate-900"
-                }`}
-              >
-                {task.title}
-              </h3>
-            </div>
-
-            {task.description && (
-              <p className="mt-1.5 text-xs text-slate-600 line-clamp-3 leading-relaxed break-words">
-                {task.description}
-              </p>
-            )}
-
-            <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-[11px] text-slate-400">
-              <span className="flex items-center gap-1 font-medium">
-                <Calendar className="h-3 w-3" />
-                {formatDate(task.createdAt)}
-              </span>
-
-              {/* Status Quick Flow */}
-              <div className="flex items-center gap-1">
-                {task.status !== "TODO" && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      onQuickStatus(
-                        task,
-                        task.status === "DONE" ? "IN_PROGRESS" : "TODO"
-                      )
-                    }
-                    title="Move back"
-                    disabled={busy}
-                    className="p-1 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700"
-                  >
-                    <RotateCcw className="h-3.5 w-3.5" />
-                  </button>
-                )}
-
-                {task.status !== "DONE" && (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      onQuickStatus(
-                        task,
-                        task.status === "TODO" ? "IN_PROGRESS" : "DONE"
-                      )
-                    }
-                    title={
-                      task.status === "TODO"
-                        ? "Move to In Progress"
-                        : "Mark Complete"
-                    }
-                    disabled={busy}
-                    className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200/60 font-semibold text-[11px] transition-all"
-                  >
-                    <span>
-                      {task.status === "TODO" ? "Start" : "Done"}
-                    </span>
-                    <ChevronRight className="h-3 w-3" />
-                  </button>
-                )}
-
-                <button
-                  type="button"
-                  onClick={() => onEdit(task)}
-                  disabled={busy}
-                  title="Edit task"
-                  className="p-1 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700"
-                >
-                  <Edit3 className="h-3.5 w-3.5" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onDelete(task)}
-                  disabled={busy}
-                  title="Delete task"
-                  className="p-1 rounded-md hover:bg-rose-50 text-slate-400 hover:text-rose-600"
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-
-        {tasks.length === 0 && (
-          <div className="h-28 flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 text-slate-400 text-xs">
-            <span>No tasks in this lane</span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// Status Badge Component
-function StatusBadge({ status }) {
-  if (status === "DONE") {
-    return (
-      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
-        Done
-      </span>
-    );
-  }
-  if (status === "IN_PROGRESS") {
-    return (
-      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
-        <span className="h-1.5 w-1.5 rounded-full bg-indigo-600 animate-pulse" />
-        In Progress
-      </span>
-    );
-  }
-  return (
-    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-      <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-      To Do
-    </span>
   );
 }

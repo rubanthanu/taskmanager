@@ -1,43 +1,51 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useSyncExternalStore } from "react";
 
-const ThemeContext = createContext({
-  theme: "light",
-  toggleTheme: () => {},
-});
+const ThemeContext = createContext({ theme: "light", toggleTheme: () => {}, mounted: false });
+const THEME_EVENT = "taskflow-theme-change";
+
+function subscribe(callback) {
+  window.addEventListener("storage", callback);
+  window.addEventListener(THEME_EVENT, callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener(THEME_EVENT, callback);
+  };
+}
+
+function readTheme() {
+  try {
+    return localStorage.getItem("taskflow_theme") === "dark" ? "dark" : "light";
+  } catch {
+    return document.documentElement.classList.contains("dark") ? "dark" : "light";
+  }
+}
+
+const serverTheme = () => "light";
+const clientMounted = () => true;
+const serverMounted = () => false;
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState("light");
-  const [mounted, setMounted] = useState(false);
+  const theme = useSyncExternalStore(subscribe, readTheme, serverTheme);
+  const mounted = useSyncExternalStore(subscribe, clientMounted, serverMounted);
 
   useEffect(() => {
-    setMounted(true);
-    const savedTheme = localStorage.getItem("taskflow_theme") || "light";
-    setTheme(savedTheme);
-    if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, []);
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
 
-  const toggleTheme = () => {
+  function toggleTheme() {
     const nextTheme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    localStorage.setItem("taskflow_theme", nextTheme);
-    if (nextTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
+    document.documentElement.classList.toggle("dark", nextTheme === "dark");
+    try {
+      localStorage.setItem("taskflow_theme", nextTheme);
+    } catch {
+      // The document still reflects the selected theme when storage is unavailable.
     }
-  };
+    window.dispatchEvent(new Event(THEME_EVENT));
+  }
 
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, mounted }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={{ theme, toggleTheme, mounted }}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme() {

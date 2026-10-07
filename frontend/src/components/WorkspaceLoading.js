@@ -1,0 +1,3 @@
+export default function WorkspaceLoading() {
+ return <main aria-busy="true" aria-label="Loading workspace" className="mx-auto w-full max-w-6xl px-6 py-10"><p role="status" className="mb-8 text-sm text-slate-500">Loading your workspace…</p><div className="h-10 w-56 rounded-lg bg-slate-200 animate-pulse"/><div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">{[0,1,2,3].map(i=><div key={i} className="h-28 rounded-xl bg-slate-200 animate-pulse"/>)}</div><div className="mt-8 h-24 rounded-xl bg-slate-200 animate-pulse"/><div className="mt-8 grid gap-5 md:grid-cols-3">{[0,1,2].map(i=><div key={i} className="h-72 rounded-xl bg-slate-200 animate-pulse"/>)}</div></main>;
+}

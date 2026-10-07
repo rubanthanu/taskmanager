@@ -15,7 +15,7 @@ import {
   Check,
   CheckCircle2,
 } from "lucide-react";
-import ThemeToggle from "../../components/ThemeToggle";
+import AuthShell from "../../components/AuthShell";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -64,28 +64,24 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center p-4 sm:p-6 bg-[#f8fafc] overflow-hidden">
-      {/* Top Bar for Theme Switcher */}
-      <div className="absolute top-6 right-6">
-        <ThemeToggle />
-      </div>
+    <AuthShell>
 
       <div className="w-full max-w-md">
         {/* Brand Icon & Heading */}
-        <div className="mb-8 text-center">
-          <div className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 mb-3.5">
+        <div className="mb-8 text-left">
+          <div className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-teal-600 text-white shadow-md shadow-teal-600/20 mb-3.5">
             <CheckCircle2 className="h-7 w-7" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900">
             Create an account
           </h1>
           <p className="mt-1.5 text-sm text-slate-500">
-            Start organizing your tasks with modern clarity
+            Make room for your best work.
           </p>
         </div>
 
         {/* Main Professional Card */}
-        <div className="rounded-2xl border border-slate-200/90 bg-white p-7 sm:p-9 shadow-lg shadow-slate-900/5">
+        <div className="rounded-2xl border border-slate-200 bg-[var(--card)] p-6 sm:p-8 shadow-xs">
           {error && (
             <div
               role="alert"
@@ -117,7 +113,7 @@ export default function RegisterPage() {
                   value={name}
                   onChange={(event) => setName(event.target.value)}
                   required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:bg-[var(--card)] focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all"
                 />
               </div>
             </div>
@@ -142,7 +138,7 @@ export default function RegisterPage() {
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:bg-[var(--card)] focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all"
                 />
               </div>
             </div>
@@ -168,11 +164,13 @@ export default function RegisterPage() {
                   onChange={(event) => setPassword(event.target.value)}
                   required
                   minLength={8}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-10 pr-10 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-10 pr-10 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:bg-[var(--card)] focus:outline-none focus:ring-2 focus:ring-teal-100 transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-pressed={showPassword}
                   className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 hover:text-slate-600 focus:outline-none"
                 >
                   {showPassword ? (
@@ -221,7 +219,7 @@ export default function RegisterPage() {
               type="submit"
               id="register-submit-btn"
               disabled={loading || !name.trim() || !email.trim() || password.length < 8}
-              className="group relative flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition-all duration-150 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-200 active:scale-[0.99] disabled:opacity-60 mt-2"
+              className="group relative flex w-full items-center justify-center gap-2 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition-all duration-150 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-200 active:scale-[0.99] disabled:opacity-60 mt-2"
             >
               {loading ? (
                 <>
@@ -243,12 +241,12 @@ export default function RegisterPage() {
           Already have an account?{" "}
           <Link
             href="/login"
-            className="font-semibold text-indigo-600 hover:text-indigo-700 underline-offset-4 hover:underline"
+            className="font-semibold text-teal-600 hover:text-teal-700 underline-offset-4 hover:underline"
           >
             Log in
           </Link>
         </p>
       </div>
-    </main>
+    </AuthShell>
   );
 }
