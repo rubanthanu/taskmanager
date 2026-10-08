@@ -20,6 +20,8 @@ app.get("/api/health", (req, res) => {
   res.json({ message: "API is running" });
 });
 
-app.listen(5000, () => {
-  console.log("Server running at http://localhost:5000");
+const port = process.env.PORT || 5000;
+
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Server running on port ${port}`);
 });

@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "dev:tsx": "tsx watch src/index.js"
+  
+    "dev:tsx": "tsx watch src/index.js",
+    "start" : "tsx src/index.js",
+    "build": "prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -22,10 +23,10 @@
     "dotenv": "^18.0.6",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "pg": "^8.23.1"
+    "pg": "^8.23.1",
+    "tsx": "^4.23.15"
   },
   "devDependencies": {
-    "prisma": "^7.10.0",
-    "tsx": "^4.23.15"
+    "prisma": "^7.10.0"
   }
 }
