@@ -8,7 +8,8 @@
   
     "dev:tsx": "tsx watch src/index.js",
     "start" : "tsx src/index.js",
-    "build": "prisma generate"
+    "build": "prisma generate",
+    "postinstall": "prisma generate --config prisma7.config.ts"
   },
   "keywords": [],
   "author": "",
